@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, Text, StyleSheet} from 'react-native';
 
 import Produtor from './componentes/Produtor';
@@ -9,6 +9,24 @@ import useTextos from '../../hooks/useTextos';
 export default function Produtores({melhoresProdutores}) {
   const lista = useProdutores(melhoresProdutores);
   const {tituloProdutores} = useTextos();
+  const [listaPersonagens, setlistaPersonagens] = useState([]);
+
+  useEffect(() => {
+    const personagens = carregaPersonagens();
+    setlistaPersonagens(personagens);
+  }, []);
+
+  const carregaPersonagens = async () => {
+    try {
+      const response = await fetch('https://rickandmortyapi.com/api/character');
+      const character = await response.json();
+      return character.results;
+    } catch (error) {
+      return 'erro';
+    }
+  };
+
+  console.log(listaPersonagens);
 
   const TopoLista = () => {
     return (
